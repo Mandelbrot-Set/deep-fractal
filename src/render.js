@@ -12,7 +12,7 @@ let programGetter = (() => {
   let savedGl = null, savedVert = null, savedFrag = null, savedProgramInfo = null;
   return (gl, vert, frag, julia) => {
     julia = julia ? 1 : 0;
-    if (gl != savedGl || vert != savedVert || savedFrag != frag(julia)) {
+    if (gl !== savedGl || vert !== savedVert || savedFrag !== frag(julia)) {
       savedGl = gl; savedVert = vert; savedFrag = frag(julia);
       savedProgramInfo = twgl.createProgramInfo(savedGl, [vert, savedFrag]);
     }
@@ -27,7 +27,7 @@ const glJulia = twgl.getWebGLContext(document.getElementById('gljulia'), { antia
 twgl.addExtensionsToContext(glJulia);
 if (!glMandel || !glJulia ) {
   Events.showError('This viewer requires WebGL', 'WebGL is turned off or not supported by this device.');
-};
+}
 const dogetex = twgl.createTexture(glMandel, { src: 'img/doge.jpg', minMag: glMandel.NEAREST });
 const lolitex = twgl.createTexture(glMandel, { src: 'img/loli.jpg', minMag: glMandel.NEAREST });
 const ricktex = twgl.createTexture(glMandel, { src: 'img/rick.jpg', minMag: glMandel.NEAREST });
@@ -72,7 +72,7 @@ function searchOrigin(aim, julia) {
         z.x = newAim.x.add(newAim.hx.mul(2 * i / n - 1));
         z.y = newAim.y.add(newAim.hy.mul(2 * j / n - 1));
         f = (julia) ? calcOrbit(julia, z, true) : calcOrbit(z, null, true)
-        if (f == imax) {
+        if (f === imax) {
           return z;
         } else if (f > fbest) {
           Object.assign(zbest, z);

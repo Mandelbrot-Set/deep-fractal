@@ -41,7 +41,7 @@ const Events = {
   /* ============== Functions ============== */
 
   function getPos(e) {
-    if (prevPhi != aim.phi) {
+    if (prevPhi !== aim.phi) {
       prevPhi = aim.phi;
       prevCos = Math.cos(aim.phi);
       prevSin = Math.sin(aim.phi);
@@ -110,25 +110,25 @@ const Events = {
 
   glcontrol.addEventListener('mousedown', e => {
     mouseDownPos = getPos(e);
-    if ((e.button == 0 && e.ctrlKey) || e.button == 1) {
-      isJulia = true;      
-    } else if (e.button == 0) {
+    if ((e.button === 0 && e.ctrlKey) || e.button === 1) {
+      isJulia = true;
+    } else if (e.button === 0) {
       isDrawingAim = true;
     }
   });
 
   glcontrol.addEventListener('mouseup', e => {
     const pos = getPos(e);
-    if (e.button == 0 && !isJulia) {
+    if (e.button === 0 && !isJulia) {
       isDrawingAim = false;
       aimZoom(pos, newAim);
-    } else if (e.button == 2) {
+    } else if (e.button === 2) {
       Events.simpleZoom(pos, 8);
     }
   });
 
   window.addEventListener('mouseup', e => {
-    if (isDrawingAim && e.target.id != 'glcontrol') {
+    if (isDrawingAim && e.target.id !== 'glcontrol') {
       getPos(e);
       glcontrol.dispatchEvent(new MouseEvent('mouseup', e));
     }
@@ -182,7 +182,7 @@ const Events = {
 
   glcontrol.addEventListener('wheel', e => {
     e.preventDefault();
-    if (wheelAccum == 0) {
+    if (wheelAccum === 0) {
       setTimeout(() => wheelZoom(getPos(e)), 100);
     }
     wheelAccum += e.deltaY;
@@ -200,7 +200,7 @@ const Events = {
   let currentRequestId = 0;
   window.addEventListener('resize', e => {
     function requestResize(crid) {
-      if (crid == currentRequestId) {
+      if (crid === currentRequestId) {
         Events.simpleZoom(aim, 1);
       }
       currentRequestId = 0;
@@ -214,7 +214,7 @@ const Events = {
   const burger = document.querySelector('.navbar-burger');
   const menu = document.getElementById(burger.dataset.target);
   menu.addEventListener('click', () => {
-    if (window.getComputedStyle(burger).display == 'block') {
+    if (window.getComputedStyle(burger).display === 'block') {
       burger.click();
     }
   });
@@ -228,32 +228,32 @@ const Events = {
   document.body.addEventListener('touchmove', function(event) {
     event.preventDefault();
   }, false);
-  
+
   let hammerjs = new Hammer.Manager(glcontrol);
   let pan = new Hammer.Pan();
   let rotate = new Hammer.Rotate();
   let pinch = new Hammer.Pinch();
-  
+
   hammerjs.add([pan, pinch, rotate]);
   hammerjs.get('pinch').set({ enable: true });
   hammerjs.get('rotate').set({ enable: true });
-  
+
   let adjustDeltaX = 0;
   let adjustDeltaY = 0;
   let adjustScale = 1;
   let adjustRotation = 0;
-  
+
   let currentDeltaX = null;
   let currentDeltaY = null;
   let currentScale = null;
   let currentRotation = null;
-  
+
   hammerjs.on("panstart pinchstart rotatestart", function(e) {
     if (e.pointerType === 'touch') {
       adjustRotation -= e.rotation;
     }
   });
-  
+
   hammerjs.on("panmove pinchmove rotatemove", function(e) {
     if (e.pointerType === 'touch') {
       currentRotation = adjustRotation + e.rotation;
@@ -262,14 +262,14 @@ const Events = {
       currentDeltaY = adjustDeltaY + e.deltaY / currentScale;
     }
   });
-  
+
   hammerjs.on("panend pinchend rotateend", function(e) {
     if (e.pointerType === 'touch') {
       adjustScale = currentScale;
       adjustRotation = currentRotation;
       adjustDeltaX = currentDeltaX;
       adjustDeltaY = currentDeltaY;
-      
+
       const dx = aim.hx.mul(-2 * adjustDeltaX / glcontrol.width);
       const dy = aim.hy.mul(-2 * adjustDeltaY / glcontrol.height);
       const cosPhi = Math.cos(aim.phi);
